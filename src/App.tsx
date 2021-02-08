@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FormEvent, useState } from 'react';
+import { Header } from './components/Header';
+import { TextField } from './components/TextField';
+
+interface Task {
+  name: string;
+  description: string;
+}
 
 function App() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    setTasks([...tasks, { name, description }])
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <form onSubmit={onSubmit}>
+        <TextField
+          id="name"
+          label="Nome"
+          onChange={(value) => setName(value)}
+        />
+        <TextField
+          id="description"
+          label="Descrição"
+          onChange={(value) => setDescription(value)}
+        />
+        <button type="submit">Adicionar</button>
+      </form>
+      <ul>
+        {tasks.map((task) => (
+          <li>
+            {task.name} - {task.description}
+          </li>
+        ))}
+      </ul>
     </div>
+
   );
 }
 
